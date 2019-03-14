@@ -9,10 +9,24 @@ using namespace pkm;
 
 int main(void)
 {
-
   vector<Pokemon> pokemon_rental;
 
-  pokemon_rental.push_back();
+  Pokemon::Builder pokemon_builder = Pokemon::builder();
+  Attributes::Builder attributes_builder = Attributes::builder();
+  Stats::Builder stats_builder = Stats::builder();
+  Metadata::Builder metadata_builder = Metadata::builder();
+
+  vector<string> moveset {"tackle", "growl"};
+
+  attributes_builder.with_nickname("pikachu");
+  attributes_builder.with_level(250);
+  attributes_builder.with_moveset(moveset);
+  
+  pokemon_builder.with_attributes(pokemon_attributes);
+  pokemon_builder.with_stats(pokemon_stats);
+  pokemon_builder.with_metadata(pokemon_metadata);
+
+  pokemon_rental.push_back(pokemon_builder.build());
 
   std::vector<pkm::Trainer> trainers;
 
