@@ -30,7 +30,7 @@ int main(void)
   }
 
   gameplay::FightOptions figh_options;
-  battle::Battle battle(fight_options, trainers[0], trainers[1]);
+  gameplay::Battle battle(fight_options, trainers[0], trainers[1]);
   battle.play();
   return 0;
 }
