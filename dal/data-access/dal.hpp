@@ -1,5 +1,6 @@
 #pragma once
 #include <fstream>
+#include <jsoncpp/json/json.h>
 
 namespace dal
 {
@@ -10,6 +11,8 @@ namespace dal
     DAL(std::string const & root)
       : root(root)
     {}
+
+    virtual ~DAL(void) {}
 
   };
 }
