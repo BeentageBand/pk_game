@@ -81,6 +81,17 @@ namespace meta
         next->prev = prev;
     }
 
+    Entry * find(K const & key)
+    {
+
+
+    }
+
+    int hashcode(K const & key, hashid)
+    {
+      
+    }
+
     void pop(void)
     {
       if(nullptr != this->tail)

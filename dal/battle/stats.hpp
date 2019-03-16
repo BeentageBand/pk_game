@@ -25,7 +25,7 @@ namespace battle {
       inline Builder & with_spd(uint16_t const spd){this->spd = spd; return * this;}
       inline Builder & with_agility(uint16_t const agility){this->agility = agility; return * this;}
 
-      Stats  build(void){ return Stats(this->atk, this->def, this->sp_atk, this->sp_def, this->spd, this->agility);}
+      Stats build(void){ return Stats(this->atk, this->def, this->sp_atk, this->sp_def, this->spd, this->agility);}
     };
 
     private:

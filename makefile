@@ -1,5 +1,5 @@
 export CXX=gcc
-export LDFLAGS= -ljsoncpp
+export LDFLAGS= -ljsoncpp 
 export CXXFLAGS=-std=gnu++11 
 export OUT=out
 export BINARY=battle_main
@@ -22,6 +22,8 @@ $(OUT) :
 
 $(BINARY:%=$(OUT)/%) : $(OUT) $(BINARY:%=$(OUT)/%.o)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
+
+LDFLAGS+=-lgtest -lgmock_main
 
 $(TEST:%=$(OUT)/%) : $(OUT) $(TEST:%=$(OUT)/%.o)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^

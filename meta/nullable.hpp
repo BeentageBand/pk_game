@@ -7,9 +7,6 @@ namespace meta
   {
     T * pointer;
     private:
-    Nullable(void)
-    : pointer(nullptr)
-    {}
     Nullable(T & pointer)
       : pointer(&pointer)
     {}
@@ -19,6 +16,10 @@ namespace meta
     {}
 
     public:
+    Nullable(void)
+    : pointer(nullptr)
+    {}
+
     virtual ~Nullable(void){}
 
     static Nullable empty(void) { return Nullable();}
