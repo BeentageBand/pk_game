@@ -1,5 +1,7 @@
 #pragma once
 #include <cstddef>
+#include <unordered_map>
+#include "nullable.hpp"
 
 namespace meta
 {
@@ -10,50 +12,44 @@ namespace meta
     public:
     struct Entry
     {
-      T * obj;
-      K key;
+      T * const obj;
       Entry * next;
       Entry * prev;
 
-      Entry(void)
-        : obj(nullptr), key(), next(nullptr), prev(nullptr)
+      explicit Entry(T & obj)
+        : obj(&obj), next(nullptr), prev(nullptr)
       {}
-
     };
 
     private:
     size_t const size;
-    Entry * buffer;
+    std::unordered_map<K, Entry> hashmap;
     Entry * head;
     Entry * tail;
     
     public:
     explicit LRU(size_t const size)
-      : size(), buffer(new Entry[size]), head(nullptr), tail(nullptr)
+      : size(), hashmap(), head(nullptr), tail(nullptr)
     {}
 
-    virtual ~LRU(void) { delete this->buff; }
+    virtual ~LRU(void) {}
 
-    T * get(K const & key)
+    T & get(K const & key, T & default_obj = T())
     {
-      int hashid = 0;
-      Entry * found = this->find(key);
-      return found->obj;
+      auto found = this->hashmap.find(key);
+
+      if (found != this->hashmap.end())
+      {
+        this->move_to_front(found.second);
+        return found.second->obj;
+      }
+      return default_obj;
     }
 
     void put(K const & key, T & obj)
     {
-      Entry * found = this->find(key);
-      if(nullptr == found->obj)
-      {
-        if(nullptr)
-        this->found->obj = &obj;
-        this->found->key = key;
-        this->move_to_front(found);
-      }
-      else
-      {
-      }
+      this->hashmap.insert(std::pair<K, Entry>(key, Entry(obj) ));
+      this->move_to_front(this->hashmap[key]);
     }
 
     private:
@@ -81,23 +77,6 @@ namespace meta
         next->prev = prev;
     }
 
-    Entry * find(K const & key)
-    {
-
-
-    }
-
-    int hashcode(K const & key, hashid)
-    {
-      
-    }
-
-    void pop(void)
-    {
-      if(nullptr != this->tail)
-        this->remove(*this->tail);
-    }
-
     void push(Entry & entry)
     {
       if(nullptr == this->head)
@@ -110,6 +89,12 @@ namespace meta
 
       entry->prev = nullptr;
       entry->next = it;
+    }
+
+    void pop(void)
+    {
+      if(nullptr != this->tail)
+        this->remove(*this->tail);
     }
   };
 }

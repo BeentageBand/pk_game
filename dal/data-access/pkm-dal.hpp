@@ -18,7 +18,7 @@ namespace dal
       : dal(&dal), lru(LRU_SIZE)
     {}
     
-    std::shared_ptr<pkm::Metadata> get_metadata(std::string const & name)
+    pkm::Metadata get_metadata(std::string const & name)
     {
       std::shared_ptr<pkm::Metadata> pkm_metadata = this->lru.get(name);
       
@@ -33,12 +33,14 @@ namespace dal
 
       pkm::Metadata::Builder builder = pkm::Metadata::builder();
 
-      builder.with_
+      builder.with_stats(this->get_battle_stats(json_metadata));
 
       pkm_metadata.reset(new pkm::Metadata(builder.build()));
       this->lru.put(name, pkm_metadata);
 
       return pkm_metadata;
     }
+
+    std::shared_ptr<pkm_metadata>
   };
 }
