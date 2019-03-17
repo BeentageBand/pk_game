@@ -8,8 +8,9 @@ export TEST=dal nullable
 export SUBDIRS=\
 .              \
 apps           \
+dal            \
 services       \
-dal            
+utils          \
 
 .PHONY: all clean binary test single-test 
 

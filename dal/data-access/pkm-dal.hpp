@@ -10,7 +10,7 @@ namespace dal
   class PkmDAL
   {
     int const LRU_SIZE = 50;
-  std::string const JSON_FILE = "pokedex.json"
+    std::string const JSON_FILE = "pokedex.json"
     DAL * dal;
     meta::LRU<pkm::Metadata> lru;
     public:
@@ -20,27 +20,54 @@ namespace dal
     
     pkm::Metadata get_metadata(std::string const & name)
     {
-      std::shared_ptr<pkm::Metadata> pkm_metadata = this->lru.get(name);
-      
-      if(pkm_metadata) return pkm_metadata;
-      //else...
+      meta::Nullable<pkm::Metadata> cached_metadata = this->lru.get(name);
+      if(cached_metadata.if_present())
+        return cached_metadata.get();
 
-      Json::Value json = this->dal->get_json(this->JSON_FILE);
-
-      Json::Value json_metadata = json[name];
-
-      if(nullptr == json_metadata) return pkm_metadata; //no metadata, not found
+      Json::Value json_pokedex = this->dal->get_json(this->JSON_FILE);
+      Json::Value json_metadata = json_pokedex.get(name);
 
       pkm::Metadata::Builder builder = pkm::Metadata::builder();
 
-      builder.with_stats(this->get_battle_stats(json_metadata));
+      builder.with_name(name);
 
-      pkm_metadata.reset(new pkm::Metadata(builder.build()));
+      std::vector<std::string> pkm_types;
+      Json::Value json_types = json_metadata.get("types");
+
+      for(int i = 0; i < json_types.size(); ++i)
+        pkm_types.push_back(json_types.get(i))
+
+      builder.with_types(pkm_types);
+
+      battle::Stats battle_stats = this->get_battle_stats(name, json_pokedex);
+      builder.with_stats(battle_stats);
+
+      pkm::Metadata pkm_metadata =  builder.build();
       this->lru.put(name, pkm_metadata);
 
       return pkm_metadata;
     }
 
-    std::shared_ptr<pkm_metadata>
-  };
+
+    battle::Stats get_battle_stats(std::string const & name, Json::Value & json = this->dal->get_json(this->JSON_FILE))
+    {
+      meta::Nullable<pkm::Metadata> cached_metadata = this->lru.get(name);
+      if(cached_metadata.if_present())
+        return cached_metadata.get().get_battle_stats();
+
+      battle::Stats::Builder builder = battle::Stats::builder();
+
+      Json::Value json_pokedex = this->dal->get_json(this->JSON_FILE);
+      Json::Value json_metadata = json_pokedex.get(name);
+      Json::Value json_stats = json_metadata.get("stats")
+
+      builder.with_atk(json_stats.get("atk"));
+      builder.with_def(json_stats.get("def"));
+      builder.with_spd(json_stats.get("spd"));
+      builder.with_sp_atk(json_stats.get("sp_atk"));
+      builder.with_sp_def(json_stats.get("sp_def"));
+
+      return builder.build();
+    }
+  }; 
 }

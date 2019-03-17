@@ -1,25 +1,39 @@
-#include "meta/nullable.hpp"
+#include <gmock/gmock.h>
 #include <iostream>
+#include "meta/nullable.hpp"
 
 using namespace meta;
 using namespace std;
 
-void print_i(int const i) { cout << "integer" << i << endl;}
+void print_i(int const i)
+{
+  cout << "integer" << i << endl;
+}
 
-int main(void)
+TEST(Nullable, of)
 {
   int i = 5;
-  Nullable<int> nullable_i = Nullable<int>::of(i);
 
-  while(i--)
-    nullable_i.if_present(print_i);
+  Nullable<int> ni = Nullable<int>::of(i);
 
-  Nullable<int> empty_i = Nullable<int>::empty();
-
-  cout << "empty print" << endl;
-  empty_i.if_present(print_i);
-  ++i;
-  print_i(empty_i.or_else(i));
-
-  return 0;
+  ASSERT_TRUE(ni.is_present());
+  ASSERT_EQ(5, ni.get();
 }
+
+TEST(Nullable, empty)
+{
+  Nullable<int> ni = Nullable<int>::empty();
+  ASSERT_FALSE(ni.is_present());
+  ASSERT_EQ(nullptr, ni.get_pointer();
+}
+
+TEST(Nullable, of_nullable)
+{
+  int * i = nullptr;
+
+  Nullable<int> ni = Nullable<int>::of_nullable(i);
+  ASSERT_FALSE(ni.is_present());
+  ASSERT_EQ(nullptr, ni.get_pointer();
+}
+
+

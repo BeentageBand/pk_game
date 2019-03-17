@@ -6,7 +6,6 @@
 
 TEST(PkmDAL, get_metadata)
 {
-  
   dal::DAL dal;
 
   dal::PkmDAL pkm_dal(dal);

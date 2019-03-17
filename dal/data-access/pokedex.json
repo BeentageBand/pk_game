@@ -1,9 +1,25 @@
 {
-  "name" : "pikachu",
-  "hp" : "90",
-  "attack" : "69",
-  "sp atk" : "180",
-  "sp def" : "180",
-  "defense" : "100",
-    "speed" : "100"
+  "pikachu"  : {
+    "types" : [ "electric"],
+    "stats" : {
+      "hp" : 100,
+      "atk" : 100,
+      "def" : 100,
+      "sp_atk" : 100,
+      "sp_def" : 100,
+      "spd" : 100
+    }
+  },
+
+  "evee"  : {
+    "types" : [ "electric"],
+    "stats" : {
+      "hp" : 100,
+      "atk" : 100,
+      "def" : 100,
+      "sp_atk" : 100,
+      "sp_def" : 100,
+      "spd" : 100
+    }
+  }
 }
