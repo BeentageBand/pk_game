@@ -1,12 +1,15 @@
 SRCS=$(wildcard *.cc)
-.PHONY : all clean $(SRCS:%.cc=%)
+.PHONY : all clean $(MAKECMDGOALS:%=%.cmd)
 
-all : $(SRCS:%.cc=%)
+all : $(SRCS:%.cc=../$(OUT)/%.o)
+	$(ECHO) "compiling all-tst"
 
-$(SRCS:%.cc=%) : $(SRCS:%.cc=$(OUT)/%.o)
-  
 clean : 
+	$(ECHO) "clean all-tst"
 	rm -rf $(SRCS:%=$(OUT)/%.o)
 
-$(OUT)/%.o : %.cc
+%.cmd : ../$(OUT)/%.o
+	$(ECHO) "compiling $@-tst"
+
+../$(OUT)/%.o : %.cc
 	$(CXX) $(CXXFLAGS) $(SUBDIRS:%= -I ../%) -o $@ -c $^

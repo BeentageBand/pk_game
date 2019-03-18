@@ -1,26 +1,27 @@
 export CXX=gcc
+export CPP=g++
 export LDFLAGS= -ljsoncpp 
 export CXXFLAGS=-std=gnu++11 
 export OUT=out
 export BINARY=battle_main
 export TEST=dal nullable
+export SUBDIRS=apps dal services utils .
+export LDDIRS=
+ifndef test
+test=dummy-test
+endif
 
-export SUBDIRS=\
-.              \
-apps           \
-dal            \
-services       \
-utils          \
+TEST_LDFLAGS=-lgmock_main -lgtest -lgmock
 
 .PHONY: all clean binary test single-test 
 
 all : binary test  
 
-binary : $(BINARY:%=$(OUT)/%) 
+binary : $(OUT) $(BINARY:%=$(OUT)/%) 
 
-test : $(TEST:%=$(OUT)/%)
+test : $(OUT) $(OUT)/unit-test 
 
-single-test : $(OUT)/$(test)
+single-test : $(OUT) $(OUT)/$(test)
 
 clean :
 	rm -rf out
@@ -28,16 +29,12 @@ clean :
 $(OUT) :
 	mkdir -p $@
 
-$(BINARY:%=$(OUT)/%) : $(OUT) $(BINARY:%=$(OUT)/%.o)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
+$(TEST:%=$(OUT)/%.o) : tst 
+	make -C $<
+$(OUT)/$(test).o : tst/$(test).cc
+	$(CXX) $(CXXFLAGS) $(SUBDIRS:%=-I %) -o $@ -c $<
 
-LDFLAGS+=-lgtest -lgmock_main
-
-$(TEST:%=$(OUT)/%) : $(OUT) $(OUT)/%
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
-
-$(BINARY:%=$(OUT)/%.o) : launcher
-	$(MAKE) -C $<
-
-$(TEST) : tst
-	$(MAKE) $@ -C $<
+$(OUT)/unit-test : $(TEST:%=$(OUT)/%.o)
+	$(CPP) $(CXXFLAGS) $(LDFLAGS) $(TEST_LDFLAGS) $(SUBDIRS:%=-I %) -o $@ $^
+$(OUT)/$(test) : $(OUT)/$(test).o
+	$(CPP) $(CXXFLAGS) $(LDFLAGS) $(TEST_LDFLAGS) $(SUBDIRS:%=-I %) -o $@ $^
