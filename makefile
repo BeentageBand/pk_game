@@ -1,17 +1,18 @@
 export CXX=gcc
 export CPP=g++
-export LDFLAGS= -ljsoncpp 
-export CXXFLAGS=-std=gnu++11 
+export TEST_DEPS=gmock_main gtest gmock
+export DEPS=jsoncpp
+export LDFLAGS=$(shell pkg-config --libs --static $(DEPS))
+export CXXFLAGS=-std=gnu++11 $(shell pkg-config --cflags $(DEPS) $(TEST_DEPS)) 
 export OUT=out
 export BINARY=battle_main
-export TEST=dal nullable
+export TEST=dal lru nullable
 export SUBDIRS=apps dal services utils .
-export LDDIRS=
 ifndef test
 test=dummy-test
 endif
 
-TEST_LDFLAGS=-lgmock_main -lgtest -lgmock
+TEST_LDFLAGS=$(shell pkg-config --libs --static $(TEST_DEPS))
 
 .PHONY: all clean binary test single-test 
 

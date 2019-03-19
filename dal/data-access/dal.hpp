@@ -1,7 +1,7 @@
 #pragma once
 #include <fstream>
 #include <string>
-#include <jsoncpp/json/json.h>
+#include "json/json.h"
 
 namespace dal
 {

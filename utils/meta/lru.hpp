@@ -12,12 +12,12 @@ namespace meta
     public:
     struct Entry
     {
-      T * const obj;
+      T obj;
       Entry * next;
       Entry * prev;
 
       explicit Entry(T & obj)
-        : obj(&obj), next(nullptr), prev(nullptr)
+        : obj(obj), next(nullptr), prev(nullptr)
       {}
     };
 
@@ -34,22 +34,22 @@ namespace meta
 
     virtual ~LRU(void) {}
 
-    T & get(K const & key, T & default_obj = T())
+    Nullable<T> get(K const & key)
     {
       auto found = this->hashmap.find(key);
 
       if (found != this->hashmap.end())
       {
-        this->move_to_front(found.second);
-        return found.second->obj;
+        this->move_to_front(found->second);
+        return Nullable<T>::of(found->second.obj);
       }
-      return default_obj;
+      return Nullable<T>::empty();
     }
 
-    void put(K const & key, T & obj)
+    void put(K const key, T obj)
     {
-      this->hashmap.insert(std::pair<K, Entry>(key, Entry(obj) ));
-      this->move_to_front(this->hashmap[key]);
+      auto inserted = this->hashmap.insert(std::pair<K, Entry>(key, Entry(obj) ));
+      this->move_to_front(inserted.first->second);
     }
 
     private:
@@ -87,8 +87,8 @@ namespace meta
       Entry * it = this->head;
       this->head = &entry;
 
-      entry->prev = nullptr;
-      entry->next = it;
+      entry.prev = nullptr;
+      entry.next = it;
     }
 
     void pop(void)
