@@ -18,6 +18,5 @@ TEST(DAL, get_json)
   dal::DAL dal;
   Json::Value json_root = dal.get_json(filename);
 
-  ASSERT_TRUE(nullptr == json_root);
-
+  ASSERT_FALSE(json_root.isNull());
 }

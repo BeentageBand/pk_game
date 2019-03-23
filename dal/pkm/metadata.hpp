@@ -15,13 +15,25 @@ namespace pkm {
         meta::Nullable<battle::Stats> stats;
         public:
         inline Builder & with_name(std::string const & name) {this->name = name; return *this;}
-        inline Builder & with_stats(battle::Stats const & stats) {this->stats = &stats; return *this;}
         inline Builder & with_types(std::vector<std::string> const & types) {this->types = types; return *this;}
+        inline Builder & with_stats(battle::Stats & stats) 
+        {
+            this->stats = meta::Nullable<battle::Stats>::of(stats);
+            return *this;
+        }
+
         inline Metadata build(void) 
         {
-          return Metadata(this->name, this->types, this->stats.or_else(battle::Stats::builder.build());
+          return Metadata(this->name, this->types, this->stats.or_else(battle::Stats::builder().build()));
         }
       };
+
+    static Builder builder(void)
+    {
+        static Builder builder;
+        return builder;
+    }
+
     private:
     std::string const name;
     std::vector<std::string> const types;
@@ -34,6 +46,6 @@ namespace pkm {
 
     inline std::string const & get_name(void){return this->name;}
     inline std::vector<std::string> const & get_types(void) {return this->types;}
-    inline battle::Stats const & get_stats(void) {return ;}
+    inline battle::Stats const & get_stats(void) {return this->stats;}
   };
 } // namespace pkm

@@ -23,13 +23,13 @@ namespace meta
     virtual ~Nullable(void){}
 
     static Nullable empty(void) { return Nullable();}
-
+;
     static Nullable of(T & data) { return Nullable(data);}
 
     static Nullable of_nullable(T * const data) { return Nullable(data);}
 
-    inline T & get(void) { return *this->pointer;}
-    inline T * get_pointer(void) {return this->pointer;}
+    inline T & get(void) const { return *this->pointer;}
+    inline T * get_pointer(void) const {return this->pointer;}
     inline void set_pointer(T * const pointer) {this->pointer = pointer;}
 
     inline T & or_else(T & else_pointer)
@@ -37,7 +37,12 @@ namespace meta
       return (this->is_present())? *this->pointer : else_pointer ;
     }
 
-    inline bool is_present(void) { return nullptr != this->pointer;}
+    inline T or_else(T && else_pointer)
+    {
+      return (this->is_present())? *this->pointer : else_pointer ;
+    }
+
+    inline bool is_present(void) const { return nullptr != this->pointer;}
 
     template<typename F>
     inline void if_present(F functor)
@@ -50,7 +55,7 @@ namespace meta
     {
       if(this != &rval)
       {
-        this->pointer.set_pointer(rval.get_pointer());
+        this->set_pointer(rval.get_pointer());
       }
       return *this;
     }

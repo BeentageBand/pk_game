@@ -43,6 +43,7 @@ namespace battle {
     Stats(uint16_t const atk, uint16_t const def, uint16_t const sp_atk, uint16_t const sp_def, uint16_t const spd)
       : atk(atk), def(def), sp_atk(sp_atk), sp_def(sp_def), spd(spd)
     {}
+
     inline uint16_t get_atk(void){ return this->atk;}
     inline uint16_t get_def(void){ return this->def;}
     inline uint16_t get_sp_atk(void){return this->sp_atk;}

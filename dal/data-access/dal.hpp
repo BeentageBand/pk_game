@@ -14,7 +14,7 @@ namespace dal
 
     virtual ~DAL(void) {}
 
-    Json::Value get_json(std::string const & filename)
+    virtual Json::Value get_json(std::string const & filename)
     {
       std::ifstream ifs;
       ifs.open(filename, std::fstream::in);
@@ -24,7 +24,7 @@ namespace dal
       return json;
     }
 
-    void put_json(Json::Value const & json, std::string const & filename)
+    virtual void put_json(Json::Value const & json, std::string const & filename)
     {
       std::ofstream ofs;
       ofs.open(filename, std::ofstream::out | std::ofstream::app);
