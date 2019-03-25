@@ -6,7 +6,7 @@ export LDFLAGS=$(shell pkg-config --libs --static $(DEPS))
 export CXXFLAGS=-std=gnu++11 $(shell pkg-config --cflags $(DEPS) $(TEST_DEPS)) 
 export OUT=out
 export BINARY=battle_main
-export TEST=dal lru nullable
+export TEST=pkm-dal dal lru nullable
 export SUBDIRS=apps dal services utils .
 ifndef test
 test=dummy-test
