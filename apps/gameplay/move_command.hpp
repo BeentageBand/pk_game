@@ -28,5 +28,5 @@ namespace gameplay
         this->move->use(this->battle.get_opponents_pokemon(), this->battle.get_trainers_pokemon(), *this->move);
       }
     }
-  }
+  };
 } // namespace battle

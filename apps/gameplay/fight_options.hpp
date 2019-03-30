@@ -11,42 +11,41 @@ namespace gameplay
 {
     class FightOptions : public Option
     {
-      public:
-      FightOptions(void)
-        : Option("Fight")
-      {}
-      
-      void display(pkm::Pokemon & pokemon, std::set<std::string> & moveset)
-      {
-        for(uint8_t i = 0; i < 4; ++i)
-        {
-          std::cout << pokemon.get_moveset()[i]<< " " << pokemon.get_pp()[i] << std::endl;
-          moveset.insert(pokemon.get_moveset()[i]);
-        }
-      }
+        public:
+            FightOptions(void)
+                : Option("Fight")
+            {}
 
-      std::shared_ptr<Command> build(pkm::Trainer & trainer) 
-      {
-        std::set<std::string>  moveset;
-        std::shared_ptr<Command> command;
+            void display(pkm::Pokemon & pokemon, std::set<std::string> & moveset)
+            {
+                for(uint8_t i = 0; i < 4; ++i)
+                {
+                    pkm::Attributes & attributes = pokemon.get_attributes();
+                    std::cout << attributes.get_move(i)<< " " << std::endl;
+                    moveset.insert(attributes.get_move(i));
+                }
+            }
 
-        pkm::Pokemon & pokemon = trainer.get_pokemon_team().get_pokemon(0);
+            Command && build(pkm::Trainer & trainer) 
+            {
+                std::set<std::string>  moveset;
+                std::shared_ptr<Command> command;
 
-        do{
+                pkm::Pokemon & pokemon = trainer.get_pokemon_team().get_pokemon(0);
 
-          this->display(pokemon, moveset);
-          std::string input;
-          std::cin >> input;
+                do{
 
-          auto found_move = moveset.find(input);
+                    this->display(pokemon, moveset);
+                    std::string input;
+                    std::cin >> input;
 
-          if(found_move != moveset.end())
-          {
-            command.reset(new MoveCommand(found_move, pokemon));
-            return command;
-          }
-          
-        } while(true);
-      }
+                    auto found_move = moveset.find(input);
+
+                    if(found_move != moveset.end())
+                    {
+                        return MoveCommand(found_move, pokemon);
+                    }
+                } while(true);
+            }
     };
 }

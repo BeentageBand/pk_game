@@ -34,10 +34,15 @@ namespace pkm
     Pokemon(Attributes const & attributes, battle::Stats const & stats, Metadata const & metadata)
       : attributes(attributes), stats(stats), metadata(metadata)
     {}
+
     static Builder builder(void)
     {
       static Builder builder;
       return builder;
     }
+
+    inline Attributes & get_attributes(void) { return this->attributes;}
+    inline battle::Stats && get_stats(void) { return this->stats;}
+    inline Metadata && get_metadata(void) { return this->metadata;}
   };
 }

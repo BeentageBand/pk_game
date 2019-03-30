@@ -2,10 +2,10 @@ SRCS=$(wildcard *.cc)
 .PHONY : all clean $(MAKECMDGOALS:%=%.cmd)
 
 all : $(SRCS:%.cc=../$(OUT)/%.o)
-	$(ECHO) "compiling all-tst"
+	echo "compiling all-tst"
 
 clean : 
-	$(ECHO) "clean all-tst"
+	echo "clean all-tst"
 	rm -rf $(SRCS:%=$(OUT)/%.o)
 
 %.cmd : ../$(OUT)/%.o

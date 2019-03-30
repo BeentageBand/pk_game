@@ -21,8 +21,10 @@ all : binary test
 binary : $(OUT) $(BINARY:%=$(OUT)/%) 
 
 test : $(OUT) $(OUT)/unit-test 
+	./$(OUT)/unit-test
 
 single-test : $(OUT) $(OUT)/$(test)
+	./$(OUT)/$(test)
 
 clean :
 	rm -rf out
@@ -32,6 +34,13 @@ $(OUT) :
 
 $(TEST:%=$(OUT)/%.o) : tst 
 	make -C $<
+
+$(BINARY:%=$(OUT)/%) : $(BINARY:%=$(OUT)/%.o) 
+	$(CXX) $(CXXFLAGS) $(LDFLAFS) $(SUBDIRS:%=-I %) -o $@ -c $<
+
+$(BINARY:%=$(OUT)/%.o) : launcher
+	make -C $<
+
 $(OUT)/$(test).o : tst/$(test).cc
 	$(CXX) $(CXXFLAGS) $(SUBDIRS:%=-I %) -o $@ -c $<
 

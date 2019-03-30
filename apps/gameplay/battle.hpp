@@ -23,26 +23,24 @@ namespace gameplay
 
     public:
     Battle(Engine & engine, pkm::Trainer & trainer, pkm::Trainer & opponent)
-      : engine(engine) options(&options), trainer(&trainer), opponent(&opponent)
+      : engine(&engine) options(&options), trainer(&trainer), opponent(&opponent)
     {}
 
-    inline pkm::Trainer & get_trainer(void) {return this->trainer;}
-    inline pkm::Trainer & get_opponent(void) {return this->opponent_pokemon;}
-    inline Engine & get_engine(void) { return this->engine;}
+    inline pkm::Trainer get_trainer(void) {return *this->trainer;}
+    inline pkm::Trainer get_opponent(void) {return *this->opponent_pokemon;}
+    inline Engine &get_engine(void) { return *this->engine;}
 
     void play(void)
     {
       uint8_t status;
       do
       {
-        std::shared_ptr<Options> options = this->engine->build_options(*this);
-        std::shared_ptr<Command> trainer_command = options->build(*this->trainer);
-        std::shared_ptr<Command> opponent_command = options->build(*this->opponent);
+        Options && options = this->get_engine().build_options(*this);
+        Command && trainer_command = options.build(*this->trainer);
+        Command && opponent_command = options.build(*this->opponent);
 
-        if(trainer_command)
-          trainer_command->execute(*this);
-        if(opponent_command)
-          opponent_command->execute(*this);
+        trainer_command.execute(*this);
+        opponent_command.execute(*this);
 
         status = this->evaluate();
       }while(status == CONTINUES);
