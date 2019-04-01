@@ -12,4 +12,4 @@ clean :
 	$(ECHO) "compiling $@-tst"
 
 ../$(OUT)/%.o : %.cc
-	$(CXX) $(CXXFLAGS) $(SUBDIRS:%= -I ../%) -o $@ -c $^
+	$(CPP) $(CPPFLAGS) $(SUBDIRS:%= -I ../%) -o $@ -c $^

@@ -36,7 +36,7 @@ $(TEST:%=$(OUT)/%.o) : tst
 	make -C $<
 
 $(BINARY:%=$(OUT)/%) : $(BINARY:%=$(OUT)/%.o) 
-	$(CXX) $(CXXFLAGS) $(LDFLAFS) $(SUBDIRS:%=-I %) -o $@ -c $<
+	$(CXX) $(CXXFLAGS) $(SUBDIRS:%=-I %) -o $@ -c $< $(LDFLAFS) 
 
 $(BINARY:%=$(OUT)/%.o) : launcher
 	make -C $<
@@ -45,6 +45,6 @@ $(OUT)/$(test).o : tst/$(test).cc
 	$(CXX) $(CXXFLAGS) $(SUBDIRS:%=-I %) -o $@ -c $<
 
 $(OUT)/unit-test : $(TEST:%=$(OUT)/%.o)
-	$(CPP) $(CXXFLAGS) $(LDFLAGS) $(TEST_LDFLAGS) $(SUBDIRS:%=-I %) -o $@ $^
+	$(CPP) $(CXXFLAGS) $(SUBDIRS:%=-I %) -o $@ $^ $(LDFLAGS) $(TEST_LDFLAGS) 
 $(OUT)/$(test) : $(OUT)/$(test).o
-	$(CPP) $(CXXFLAGS) $(LDFLAGS) $(TEST_LDFLAGS) $(SUBDIRS:%=-I %) -o $@ $^
+	$(CPP) $(CXXFLAGS) $(SUBDIRS:%=-I %) -o $@ $^ $(LDFLAGS) $(TEST_LDFLAGS) 
