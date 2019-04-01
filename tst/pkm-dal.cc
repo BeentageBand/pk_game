@@ -14,7 +14,7 @@ using namespace ::testing;
 TEST(PkmDAL, get_metadata)
 {
   NiceMock<DALMock> mock_dal;
-  EXPECT_CALL(mock_dal, get_json(_)).WillOnce(Return(Json::nullValue));
+  EXPECT_CALL(mock_dal, get_json(_)).Times(2).WillRepeatedly(Return(Json::nullValue));
 
   dal::PkmDAL pkm_dal(mock_dal);
 

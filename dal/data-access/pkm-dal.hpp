@@ -53,7 +53,6 @@ namespace dal
 
     battle::Stats get_battle_stats(std::string const & name, std::string json_file = JSON_FILE)
     {
-        Json::Value && json = this->dal->get_json(json_file);
       meta::Nullable<pkm::Metadata> cached_metadata = this->lru.get(name);
       if(cached_metadata.is_present())
         return cached_metadata.get().get_stats();
