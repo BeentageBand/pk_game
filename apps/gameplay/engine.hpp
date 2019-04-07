@@ -10,6 +10,6 @@ namespace gameplay
   {
     public:
     virtual ~Engine(void) {}
-    virtual std::shared_ptr<Option> build_options(Battle & battle) = 0;
+    virtual Option && build_options(Battle & battle) = 0;
   };
 }

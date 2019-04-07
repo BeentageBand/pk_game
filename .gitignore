@@ -1,7 +1,12 @@
+#Project
 out
 *.o
 *.a
 
+#Eclipse Project
 .cproject
 .project
 .settings
+
+#VSCode Project
+.vscode

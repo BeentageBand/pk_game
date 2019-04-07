@@ -7,6 +7,24 @@ namespace pkm
 {
   class Attributes
   {
+    public:
+    class Builder
+    {
+      public:
+      std::string nickname;
+      uint8_t level;
+      std::vector<std::string> moveset;
+
+      inline Builder & with_nickname(std::string const & nickname) {this->nickname = nickname; return *this;}
+      inline Builder & with_level(uint8_t const level) {this->level = level; return *this;}
+      inline Builder & with_moveset(std::vector<std::string> const & moveset) {this->moveset = moveset; return *this;}
+
+      Attributes build(void)
+      {
+        return Attributes(this->nickname, this->level, this->moveset);
+      }
+    };
+
     std::string nickname;
     uint8_t level;
     std::vector<std::string> moveset;
@@ -23,6 +41,12 @@ namespace pkm
       {
         this->moveset.assign(moveset.begin(), moveset.end());
       }
+    }
+
+    static Builder builder(void)
+    {
+      static Builder builder;
+      return builder;
     }
 
     inline std::string const & get_nickname(void) {return this->nickname;}

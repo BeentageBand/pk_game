@@ -42,7 +42,7 @@ namespace pkm
     }
 
     inline Attributes & get_attributes(void) { return this->attributes;}
-    inline battle::Stats && get_stats(void) { return this->stats;}
-    inline Metadata && get_metadata(void) { return this->metadata;}
+    inline battle::Stats & get_stats(void) { return this->stats;}
+    inline Metadata & get_metadata(void) { return this->metadata;}
   };
 }

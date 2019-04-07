@@ -14,9 +14,13 @@ namespace pkm {
 
         friend class Trainer;
         public:
-        inline void with_name(std::string const & name) {this->name = name;}
-        inline void with_pokemon_team(PokemonTeam & pokemon_team) {this->pokemon_team = pokemon_team;}
-        inline Trainer  build(void){ return Trainer(this->name, this->pokemon_team);}
+        inline Builder & with_name(std::string const & name) {this->name = name; return *this;}
+        inline Builder & with_pokemon_team(PokemonTeam & pokemon_team) 
+        {
+          this->pokemon_team = pokemon_team; return *this;
+        }
+
+        inline Trainer build(void){ return Trainer(this->name, this->pokemon_team);}
       };
 
     private:

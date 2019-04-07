@@ -12,6 +12,10 @@ namespace pkm {
     std::deque<Pokemon *> team;
 
     public:
+    PokemonTeam(void)
+    : team()
+    {}
+
     void push_pokemon(Pokemon & pokemon)
     {
       if((MAX_PARTY > this->team.size()) 
@@ -25,7 +29,7 @@ namespace pkm {
     {
       Pokemon & pokemon = *this->team.at(i);
       this->team.erase(this->team.begin() + i);
-      this->team.push_front(pokemon);
+      this->team.push_front(&pokemon);
     }
   };
   
