@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <functional>
 #include <string>
 #include <vector>
 
@@ -49,9 +50,10 @@ namespace pkm
       return builder;
     }
 
-    inline std::string const & get_nickname(void) {return this->nickname;}
-    inline uint8_t get_level(void) { return this->level;}
-    inline std::string const & get_move(uint8_t const i)
+    inline std::string const & get_nickname(void) const {return this->nickname;}
+    inline uint8_t get_level(void) const { return this->level;}
+    inline std::vector<std::string> const & get_moveset(void) const { return this->moveset;}
+    inline std::string const & get_move(uint8_t const i) const
     {
       if(this->moveset.size() > i)
       {
@@ -62,6 +64,14 @@ namespace pkm
         static std::string empty;
         return empty;
       }
+    }
+
+    inline bool operator==(Attributes const & attributes) const
+    {
+      if (this == &attributes) return true;
+      return attributes.get_level() == this->get_level() &&
+             attributes.get_moveset() == this->get_moveset() &&
+             attributes.get_nickname() == this->get_nickname();
     }
   };
 }

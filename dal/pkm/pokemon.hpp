@@ -43,8 +43,16 @@ namespace pkm
       return builder;
     }
 
-    inline Attributes & get_attributes(void) { return this->attributes;}
-    inline battle::Stats & get_stats(void) { return this->stats;}
-    inline Metadata & get_metadata(void) { return this->metadata;}
+    inline Attributes const & get_attributes(void) const { return this->attributes;}
+    inline battle::Stats const & get_stats(void) const { return this->stats;}
+    inline Metadata const & get_metadata(void) const { return this->metadata;}
+
+    inline bool operator==(Pokemon const & pokemon) const
+    {
+      if(this == &pokemon) return true;
+      return pokemon.get_attributes() == this->get_attributes() &&
+             pokemon.get_metadata() == this->get_metadata() &&
+             pokemon.get_stats() == this->get_stats();
+    }
   };
 }

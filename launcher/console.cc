@@ -1,3 +1,6 @@
+#include <string>
+#include <unordered_map>
+#include <vector>
 #include "console/option_parser.hpp"
 
 int main(int argc, char ** argv)

@@ -43,8 +43,16 @@ namespace pkm {
       :name(name), types(types), stats(stats)
     {}
 
-    inline std::string const & get_name(void){return this->name;}
-    inline std::vector<std::string> const & get_types(void) {return this->types;}
-    inline battle::Stats const & get_stats(void) {return this->stats;}
+    inline std::string const & get_name(void) const{return this->name;}
+    inline std::vector<std::string> const & get_types(void) const {return this->types;}
+    inline battle::Stats const & get_stats(void) const {return this->stats;}
+
+    inline bool operator==(Metadata const & metadata) const
+    {
+      if(this == &metadata) return true;
+      return metadata.get_name() == this->get_name() &&
+             metadata.get_stats() == this->get_stats() &&
+             metadata.get_types() == this->get_types();
+    }
   };
 } // namespace pkm
