@@ -2,7 +2,6 @@
 #include <string>
 #include <vector>
 #include "battle/stats.hpp"
-#include "meta/nullable.hpp"
 
 namespace pkm {
   class Metadata 
@@ -12,19 +11,19 @@ namespace pkm {
       {
         std::string name;
         std::vector<std::string> types;
-        meta::Nullable<battle::Stats> stats;
+        battle::Stats stats;
         public:
+        Builder(void)
+        : name(), types(), stats(battle::Stats::builder().build())
+        {}
+
         inline Builder & with_name(std::string const & name) {this->name = name; return *this;}
         inline Builder & with_types(std::vector<std::string> const & types) {this->types = types; return *this;}
-        inline Builder & with_stats(battle::Stats & stats) 
-        {
-            this->stats = meta::Nullable<battle::Stats>::of(stats);
-            return *this;
-        }
+        inline Builder & with_stats(battle::Stats const & stats) { this->stats = stats; return *this;}
 
         inline Metadata build(void) 
         {
-          return Metadata(this->name, this->types, this->stats.or_else(battle::Stats::builder().build()));
+          return Metadata(this->name, this->types, this->stats);
         }
       };
 
@@ -35,8 +34,8 @@ namespace pkm {
     }
 
     private:
-    std::string const name;
-    std::vector<std::string> const types;
+    std::string name;
+    std::vector<std::string> types;
     battle::Stats stats;
     
     public:

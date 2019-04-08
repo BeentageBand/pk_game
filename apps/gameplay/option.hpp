@@ -53,7 +53,7 @@ namespace gameplay
             {
                 std::cin >> key_input;
 
-                if(this->options.empty()) return Command();
+                if(this->options.empty()) return std::move(Command());
 
                 auto found_option = this->options.find(key_input);
                 if(found_option != this->options.end())

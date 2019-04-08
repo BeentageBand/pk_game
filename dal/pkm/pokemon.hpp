@@ -13,9 +13,14 @@ namespace pkm
       Attributes attributes;
       battle::Stats stats;
       Metadata metadata;
-      private:
 
-      public:
+    public:
+      Builder(void)
+    : attributes(Attributes::builder().build()),
+	  stats(battle::Stats::builder().build()),
+	  metadata(Metadata::builder().build())
+    {}
+
       inline Builder & with_attributes(Attributes const & attributes) { this->attributes = attributes; return *this;}
       inline Builder & with_stats(battle::Stats const & stats) { this->stats = stats; return *this;}
       inline Builder & with_metadata(Metadata const & metadata) { this->metadata = metadata; return *this;}

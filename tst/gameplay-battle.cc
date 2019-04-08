@@ -23,7 +23,7 @@ class GameplayBattle : public ::testing::Test
     pkm::Trainer && build_trainer(std::string const & name, pkm::Pokemon & pokemon)
     {
         pkm::PokemonTeam team = build_pokemon_team(pokemon);
-        return pkm::Trainer::builder().with_name(name).with_pokemon_team(team).build();
+        return std::move(pkm::Trainer::builder().with_name(name).with_pokemon_team(team).build());
     }
 
     pkm::PokemonTeam build_pokemon_team(pkm::Pokemon & pokemon)
