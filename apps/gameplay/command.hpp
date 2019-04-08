@@ -7,6 +7,6 @@ namespace gameplay
   {
     public:
     virtual ~Command(void){}
-    virtual void execute(Battle & battle) = 0;
+    virtual void execute(Battle & battle) {};
   };
 }

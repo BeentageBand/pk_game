@@ -15,7 +15,6 @@ namespace battle {
       uint16_t sp_def;
       uint16_t spd;
       public:
-      Builder(void){}
 
       inline Builder & with_atk(uint16_t const atk){this->atk = atk; return *this;}
       inline Builder & with_def(uint16_t const def){this->def = def; return * this;}

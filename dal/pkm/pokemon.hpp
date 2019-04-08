@@ -10,19 +10,16 @@ namespace pkm
     public:
     class Builder
     {
-      Attributes const * attributes;
-      battle::Stats const * stats;
-      Metadata const * metadata;
+      Attributes attributes;
+      battle::Stats stats;
+      Metadata metadata;
       private:
-      Builder(void)
-      {}
 
-      friend class Pokemon;
       public:
-      inline Builder & with_attributes(Attributes const & attributes) { this->attributes = &attributes; return *this;}
-      inline Builder & with_stats(battle::Stats const & stats) { this->stats = &stats; return *this;}
-      inline Builder & with_metadata(Metadata const & metadata) { this->metadata = &metadata; return *this;}
-      inline Pokemon build(void){return Pokemon(*this->attributes, *this->stats, *this->metadata);}
+      inline Builder & with_attributes(Attributes const & attributes) { this->attributes = attributes; return *this;}
+      inline Builder & with_stats(battle::Stats const & stats) { this->stats = stats; return *this;}
+      inline Builder & with_metadata(Metadata const & metadata) { this->metadata = metadata; return *this;}
+      inline Pokemon build(void){return Pokemon(this->attributes, this->stats, this->metadata);}
     };
 
     private:

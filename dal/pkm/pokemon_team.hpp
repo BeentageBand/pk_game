@@ -9,27 +9,27 @@ namespace pkm {
   class PokemonTeam
   {
     enum {MAX_PARTY = 6};
-    std::deque<Pokemon *> team;
+    std::deque<Pokemon> team;
 
     public:
     PokemonTeam(void)
     : team()
     {}
 
-    void push_pokemon(Pokemon & pokemon)
+    void push_pokemon(Pokemon const & pokemon)
     {
       if((MAX_PARTY > this->team.size()) 
-          && (this->team.end() == std::find(this->team.begin(), this->team.end(), &pokemon)))
-        this->team.push_back(&pokemon);
+          && (this->team.end() == std::find(this->team.begin(), this->team.end(), pokemon)))
+        this->team.push_back(pokemon);
     }
 
-    inline Pokemon & at(uint8_t const i) { return (i < this->team.size())? *this->team.at(i) : *this->team.at(this->team.size() -1); }
+    inline Pokemon & at(uint8_t const i) { return (i < this->team.size())? this->team.at(i) : this->team.at(this->team.size() -1); }
 
     void switch_first(uint8_t const i)
     {
-      Pokemon & pokemon = *this->team.at(i);
+      Pokemon & pokemon = this->team.at(i);
       this->team.erase(this->team.begin() + i);
-      this->team.push_front(&pokemon);
+      this->team.push_front(pokemon);
     }
   };
   

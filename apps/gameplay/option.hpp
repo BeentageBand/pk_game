@@ -16,7 +16,7 @@ namespace gameplay
             : name(name)
         {}
         virtual ~Option(void){}
-        inline std::string & get_name(void) {return this->name;}
+        inline std::string const & get_name(void) {return this->name;}
         virtual Command && build(pkm::Trainer & trainer) = 0;
     };
 

@@ -1,6 +1,12 @@
 #include "gmock/gmock.h"
 #include "gameplay-mock.hpp"
 #include "gameplay/battle.hpp"
+#include "pkm/attributes.hpp"
+#include "pkm/metadata.hpp"
+#include "pkm/pokemon.hpp"
+#include "pkm/pokemon_team.hpp"
+#include "pkm/trainer.hpp"
+#include "battle/stats.hpp"
 
 using namespace gameplay;
 
@@ -17,7 +23,7 @@ class GameplayBattle : public ::testing::Test
     pkm::Trainer && build_trainer(std::string const & name, pkm::Pokemon & pokemon)
     {
         pkm::PokemonTeam team = build_pokemon_team(pokemon);
-        return pkm::Trainer::builder().with_name(name).with_pokemon_team(pokemon_team).build();
+        return pkm::Trainer::builder().with_name(name).with_pokemon_team(team).build();
     }
 
     pkm::PokemonTeam build_pokemon_team(pkm::Pokemon & pokemon)
@@ -49,5 +55,5 @@ TEST_F(GameplayBattle, play_continues)
     Battle battle(this->mock_engine, trainer, opponent);
 
     uint8_t evaluates = battle.evaluate();
-    ASSERT_EQ(reinterpret_cast<uint8_t>(Battle::CONTINUES), evaluates);
+    ASSERT_EQ(evaluates, Battle::CONTINUES);
 }
