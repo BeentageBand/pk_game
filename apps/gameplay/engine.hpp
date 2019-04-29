@@ -11,5 +11,6 @@ namespace gameplay
     public:
     virtual ~Engine(void) {}
     virtual Option && build_options(Battle & battle) = 0;
+    virtual Decider && build_decider(void) = 0;
   };
 }

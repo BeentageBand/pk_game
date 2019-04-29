@@ -12,11 +12,13 @@ namespace gameplay
     public:
     enum Status
     {
-      CONTINUES = 0,
-      STALE,
-      WIN,
-      LOSE
+      STALE = 0x00U,
+      LOSE = 0x01U,
+      WIN = 0x02U,
+      CONTINUES = 0x03
     };
+
+    static uint8_t const EVALUATION_MASK;
 
     Engine * engine;
     pkm::Trainer trainer;
@@ -45,7 +47,15 @@ namespace gameplay
 
     uint8_t evaluate(void)
     {
-      return 0;//TODO fix gameplay status
+        Decider && decider = this->get_engine().build_decider();
+        bool can_trainer_continue = decider.evaluate(this->trainer);
+        bool can_opponent_continue = decider.evaluate(this->opponent);
+
+        uint8_t evaluation = 0x01U << (EVALUATION_MASK & evaluation);
+        evaluation |= (EVALUATION_MASK & can_opponent_continue);
+        return evaluation;
     }
   };
+
+  uint8_t const Battle::EVALUATION_MASK = 0x01U;
 }

@@ -9,15 +9,17 @@
 #include "battle/stats.hpp"
 
 using namespace gameplay;
+using namespace ::testing;
 
-class GameplayBattle : public ::testing::Test
+class GameplayBattle : public Test
 {
     public:
-    ::testing::NiceMock<MockEngine> mock_engine;
+    NiceMock<MockEngine> mock_engine;
+    DeciderStub decider_stub;
 
     public:
     GameplayBattle(void)
-    : mock_engine()
+    : mock_engine(), decider_stub()
     {}
 
     pkm::Trainer && build_trainer(std::string const & name, pkm::Pokemon & pokemon)
@@ -43,10 +45,15 @@ class GameplayBattle : public ::testing::Test
         std::vector<std::string> moveset {"flamethrower", "sword dance", "aerial ace", "rest"};
         pkm::Attributes attributes = pkm::Attributes::builder().with_nickname(name).with_level(36).with_moveset(moveset).build();
         return pkm::Pokemon::builder().with_attributes(attributes).with_metadata(metadata).with_stats(stats).build();
-    }
+   }
 };
 
-TEST_F(GameplayBattle, play_continues)
+/**
+ * Given evaluate
+ * when both trainers can continue
+ * then return continue
+ */
+TEST_F(GameplayBattle, evaluate_continues)
 {
     pkm::Pokemon pokemon = this->build_pokemon("charizard");
     pkm::Trainer trainer = this->build_trainer("trainer", pokemon);
@@ -54,6 +61,68 @@ TEST_F(GameplayBattle, play_continues)
 
     Battle battle(this->mock_engine, trainer, opponent);
 
-    uint8_t evaluates = battle.evaluate();
-    ASSERT_EQ(evaluates, Battle::CONTINUES);
+    this->decider_stub.add_evaluate_status(true);
+    this->decider_stub.add_evaluate_status(true);
+    EXPECT_CALL(this->mock_engine, build_decider()).WillOnce(Return(ByMove(std::move(this->decider_stub))));
+    ASSERT_EQ(gameplay::Battle::CONTINUES, battle.evaluate());
+}
+
+/**
+ * Given evaluate
+ * when trainer can continue but opponent
+ * then return win
+ */
+TEST_F(GameplayBattle, evaluate_winner)
+{
+    pkm::Pokemon pokemon = this->build_pokemon("charizard");
+    pkm::Trainer trainer = this->build_trainer("trainer", pokemon);
+    pkm::Trainer opponent = this->build_trainer("opponent", pokemon);
+
+    Battle battle(this->mock_engine, trainer, opponent);
+
+    this->decider_stub.add_evaluate_status(true);
+    this->decider_stub.add_evaluate_status(false);
+    EXPECT_CALL(this->mock_engine, build_decider()).WillOnce(Return(ByMove(std::move(this->decider_stub))));
+
+    ASSERT_EQ(gameplay::Battle::WIN, battle.evaluate());
+}
+
+/**
+ * Given evaluate
+ * when opponent can continue but trainer
+ * then return lose 
+ */
+TEST_F(GameplayBattle, evaluate_lose)
+{
+    pkm::Pokemon pokemon = this->build_pokemon("charizard");
+    pkm::Trainer trainer = this->build_trainer("trainer", pokemon);
+    pkm::Trainer opponent = this->build_trainer("opponent", pokemon);
+
+    Battle battle(this->mock_engine, trainer, opponent);
+
+    this->decider_stub.add_evaluate_status(false);
+    this->decider_stub.add_evaluate_status(true);
+    EXPECT_CALL(this->mock_engine, build_decider()).WillOnce(Return(ByMove(std::move(this->decider_stub))));
+
+    ASSERT_EQ(gameplay::Battle::LOSE, battle.evaluate());
+}
+
+/**
+ * Given evaluate
+ * when both trainers cannot continue
+ * then return stale 
+ */
+TEST_F(GameplayBattle, evaluate_stale)
+{
+    pkm::Pokemon pokemon = this->build_pokemon("charizard");
+    pkm::Trainer trainer = this->build_trainer("trainer", pokemon);
+    pkm::Trainer opponent = this->build_trainer("opponent", pokemon);
+
+    Battle battle(this->mock_engine, trainer, opponent);
+
+    this->decider_stub.add_evaluate_status(false);
+    this->decider_stub.add_evaluate_status(false);
+    EXPECT_CALL(this->mock_engine, build_decider()).WillOnce(Return(ByMove(std::move(this->decider_stub))));
+
+    ASSERT_EQ(gameplay::Battle::STALE, battle.evaluate());
 }
