@@ -3,7 +3,7 @@
 #include <map>
 #include <memory>
 #include <string>
-#include "commands/command.hpp"
+#include "gameplay/commands/command.hpp"
 #include "pkm/trainer.hpp"
 
 namespace gameplay 

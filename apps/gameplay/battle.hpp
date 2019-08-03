@@ -1,8 +1,8 @@
 #pragma once
 #include <cstdint>
-#include "command.hpp"
-#include "engine.hpp"
-#include "option.hpp"
+#include "commands/command.hpp"
+#include "engines/engine.hpp"
+#include "options/option.hpp"
 #include "pkm/trainer.hpp"
 
 namespace gameplay
