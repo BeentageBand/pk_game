@@ -1,9 +1,9 @@
 #pragma once
 #include <vector>
-#include "gameplay/command.hpp"
-#include "gameplay/decider.hpp"
-#include "gameplay/engine.hpp"
-#include "gameplay/option.hpp"
+#include "gameplay/commands/command.hpp"
+#include "gameplay/deciders/decider.hpp"
+#include "gameplay/engines/engine.hpp"
+#include "gameplay/options/option.hpp"
 
 class MockCommand : public gameplay::Command
 {
