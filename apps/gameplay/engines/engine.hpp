@@ -1,8 +1,7 @@
 #pragma once
 #include <memory>
 
-namespace gameplay
-{
+namespace gameplay {
   class Option;
   class Battle;
 
